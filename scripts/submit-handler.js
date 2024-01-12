@@ -10,7 +10,6 @@ async function submitHandler(event) {
   event.preventDefault();
   const userInput = event.target.queryInput.value;
   let fetchResult = await sendData(userInput);
-  console.log('fetchResult returned to submitHandler: ' + fetchResult);
   let resultArr = fetchResult.query;
   displayResult(resultArr);
 }
@@ -32,23 +31,25 @@ async function displayResult(data) {
     // table header title cell
     let tHeadTitleCell = document.createElement('th'); // thead Title
     tHeadTitleCell.textContent = 'Title';
+    tHeadTitleCell.setAttribute('scope', 'col');
     tHeadRow.appendChild(tHeadTitleCell);
 
     // table header word count cell
     let tHeadWordCountCell = document.createElement('th'); // thead Word Count
-    tHeadWordCountCell.textContent = 'Word Count';
+    tHeadWordCountCell.textContent = 'Words';
+    tHeadWordCountCell.setAttribute('scope', 'col');
     tHeadRow.appendChild(tHeadWordCountCell);
 
     // table header html snippet cell
     let tHeadSnippetCell = document.createElement('th'); // thead Snippet
     tHeadSnippetCell.textContent = 'Snippet';
+    tHeadSnippetCell.setAttribute('scope', 'col');
     tHeadRow.appendChild(tHeadSnippetCell);
 
     // attach header row to header parent
     tHead.appendChild(tHeadRow);
 
     data.search.forEach((item) => {
-      console.log('data.search.forEach item => ', item);
       // new data, new row!
       let tableRow = document.createElement('tr');
 
@@ -84,6 +85,7 @@ async function displayResult(data) {
 
 // use Fetch to send query to wikipedia api and return results
 async function sendData(queryTerm) {
+  // todo: consider processing queryTerm as UrlEncoded to support space, puctuation
   console.log('sendData() received queryTerm: ', queryTerm);
   let fetchUrl =
     'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' +
@@ -102,6 +104,5 @@ async function sendData(queryTerm) {
   });
 
   let data = await response.json();
-  console.log(data);
   return data;
 }
