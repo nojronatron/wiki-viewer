@@ -1,3 +1,73 @@
+* {
+  font-size: 12pt;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
 body {
-  background-color: lightskyblue;
+  background-color: skyblue;
+}
+
+form {
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-around;
+}
+
+input {
+  font-size: 0.8rem;
+  border-radius: 4pt;
+  margin: 4px;
+  padding: 2px;
+}
+
+label {
+  margin: 4px;
+  padding: 2px;
+}
+
+section {
+  margin: 4px;
+  text-align: center;
+}
+
+table {
+  border: 2px solid darkorange;
+  border-radius: 4pt;
+}
+
+th {
+  font-size: 0.8em;
+  font-weight: 800;
+  padding: 4px;
+  background-color: azure;
+}
+
+td {
+  padding: 4px;
+  background-color: lightcyan;
+}
+
+code {
+  font-size: 0.8em;
+}
+
+.centeredCellText {
+  text-align: center;
+}
+
+.centeredSmallCellText {
+  font-size: 0.8em;
+  text-align: center;
+}
+
+.snippetText {
+  text-align: justify;
+}
+
+.inputSection {
+  background-color: orange;
+  padding: 4px;
+  display: flex;
+  justify-content: space-around;
 }

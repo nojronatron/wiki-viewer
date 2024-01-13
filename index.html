@@ -13,17 +13,26 @@
 </head>
 
 <body>
-  <section>
-    <form id="docSearchForm">
-      <label for="queryInput">What are you searching for?</label>
-      <input type="text" id="queryInput" name="queryInput" />
-      <input type="submit" value="submit" />
-    </form>
+  <section class="inputSection">
+    <div>
+      <form id="docSearchForm">
+        <label for="queryInput">Enter a topic:</label>
+        <input type="text" id="queryInput" name="queryInput" />
+        <input type="submit" value="Get Article Snippets" />
+      </form>
+    </div>
+    <div>
+      <input type="button" value="Get Random Article" id="clickRandomArticle" />
+    </div>
   </section>
+
   <section id="resultSection">
 
   </section>
-  <script src="scripts/submit-handler.js" defer></script>
+  <script src="scripts/query-extract-sentence.js" defer></script>
+  <script src="scripts/opensearch-title.js" defer></script>
+  <script src="scripts/search-function.js" defer></script>
+  <!-- todo: add random article fetching script -->
 </body>
 
 </html>

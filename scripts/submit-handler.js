@@ -9,9 +9,9 @@ form.addEventListener('submit', submitHandler, false);
 async function submitHandler(event) {
   event.preventDefault();
   const userInput = event.target.queryInput.value;
-  let fetchResult = await sendData(userInput);
-  let resultArr = fetchResult.query;
-  displayResult(resultArr);
+  // let fetchResult = await sendData(userInput);
+  // let resultArr = fetchResult.query;
+  // displayResult(resultArr);
 }
 
 async function displayResult(data) {
@@ -42,7 +42,7 @@ async function displayResult(data) {
 
     // table header html snippet cell
     let tHeadSnippetCell = document.createElement('th'); // thead Snippet
-    tHeadSnippetCell.textContent = 'Snippet';
+    tHeadSnippetCell.textContent = 'Article Snippet';
     tHeadSnippetCell.setAttribute('scope', 'col');
     tHeadRow.appendChild(tHeadSnippetCell);
 
@@ -56,17 +56,22 @@ async function displayResult(data) {
       // setup title, wordcount, snippet cell text data
       let titleCell = document.createElement('td');
       titleCell.textContent = item.title;
+      titleCell.setAttribute('class', 'centeredCellText');
       tableRow.appendChild(titleCell);
 
       let wordCountCell = document.createElement('td');
       wordCountCell.textContent = item.wordcount;
+      wordCountCell.setAttribute('class', 'centeredSmallCellText');
       tableRow.appendChild(wordCountCell);
 
       let snippetCell = document.createElement('td');
-      // snippet.textContent = item.snippet;
       let codeSnippet = document.createElement('code');
-      codeSnippet.textContent = item.snippet;
-      // tableRow.append(snippet); // should be appendChild instead??
+
+      // make the code snippet safe
+      const safeSnippetText = removeElements(item.snippet);
+      codeSnippet.textContent = safeSnippetText;
+
+      codeSnippet.setAttribute('class', 'snippetText');
       snippetCell.appendChild(codeSnippet);
       tableRow.appendChild(snippetCell);
 
@@ -84,25 +89,25 @@ async function displayResult(data) {
 }
 
 // use Fetch to send query to wikipedia api and return results
-async function sendData(queryTerm) {
-  // todo: consider processing queryTerm as UrlEncoded to support space, puctuation
-  console.log('sendData() received queryTerm: ', queryTerm);
-  let fetchUrl =
-    'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' +
-    queryTerm +
-    '&format=json&origin=*';
-  console.log(`concatenated url: ${fetchUrl}`);
+// async function sendData(queryTerm) {
+//   // todo: consider processing queryTerm as UrlEncoded to support space, puctuation
+//   console.log('sendData() received queryTerm: ', queryTerm);
+//   let fetchUrl =
+//     'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' +
+//     queryTerm +
+//     '&format=json&origin=*';
+//   console.log(`concatenated url: ${fetchUrl}`);
 
-  let headersList = {
-    Accept: '*/*',
-    'User-Agent': 'Exploring/1.0 (jonrumsey.dev@gmail.com)',
-  };
+//   let headersList = {
+//     Accept: '*/*',
+//     'User-Agent': 'Exploring/1.0 (https://github.com/nojronatron)',
+//   };
 
-  let response = await fetch(fetchUrl, {
-    method: 'GET',
-    headers: headersList,
-  });
+//   let response = await fetch(fetchUrl, {
+//     method: 'GET',
+//     headers: headersList,
+//   });
 
-  let data = await response.json();
-  return data;
-}
+//   let data = await response.json();
+//   return data;
+// }
