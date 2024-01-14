@@ -1,32 +1,11 @@
 'use strict';
-/* request: http://en.wikipedia.org/w/api.php?action=opensearch&search=boeing&format=json
 
-json: [	"boeing",
-	[
-		"Boeing",
-		"Boeing 737 MAX",
-		...
-	],
-	[
-		"",
-		...
-	],
-	[
-		"https://en.wikipedia.org/wiki/Boeing",
-		"https://en.wikipedia.org/wiki/Boeing_737_MAX",
-		...
-	]
-]
-*/
-
+// queries Wikimedia API for a title and returns arrays of title and document hyperlinks
 async function getOpenSearchTitles(title) {
-  // console.log('openSearchTitle param is' + title);
-
   let fetchUrl =
     'https://en.wikipedia.org/w/api.php?action=opensearch&search=' +
     title +
     '&format=json&origin=*';
-  // console.log(`concatenated url: ${fetchUrl}`);
 
   let headersList = {
     Accept: '*/*',
@@ -47,15 +26,11 @@ async function getOpenSearchTitles(title) {
       console.error(`Fetch problem: ${err.message}`);
     });
 
-  // console.log(`opensearch-title fetch returned: ` + fetchResult);
-
   if (Array.isArray(fetchResult) == false || fetchResult.length < 1) {
     return [];
   }
 
+  // arrange the result in a 2-d array of [[title, title, ...], [url, url, ...]]
   const result = [fetchResult[1], fetchResult[3]];
-  // console.log('opensearch title 2-d array "result[0]" : ' + result[0]);
-  // console.log('opensearch title 2-day array "result[1]" : ' + result[1]);
-
   return result;
 }
