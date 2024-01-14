@@ -18,48 +18,46 @@ async function formSubmitHandler(event) {
     return;
   }
 
-  // openSearchJson should be [ [title1, title2, ...], [url1, url2, ...]]
-  // for each title in array[0] get the article extract sentence
-  // console.log(
-  //   'search-function formatSubmitHandler openSearchJason[0]: ' +
-  //     openSearchJson[0]
-  // );
-  // console.log(
-  //   'search-function formatSubmitHandler openSearchJason[1]: ' +
-  //     openSearchJson[1]
-  // );
-
-  const extractSentences = [];
-  openSearchJson[1].forEach(async (title) => {
-    extractSentences.push(await getQueryExtractSentence(title));
+  // acquire single sentence extracts from each document
+  // using each Title as the search term
+  // Promise.all section is c/o github copilot...
+  const extractSentencesPromises = openSearchJson[0].map((titleUrl) => {
+    return getQueryExtractSentence(titleUrl);
   });
 
-  console.log('formSubmitHandler extractSentences array: ' + extractSentences);
+  const extractSentences = await Promise.all(extractSentencesPromises);
+  // console.log('formSubmitHandler extractSentences array: ' + extractSentences);
 
   // paste-together arrays like: [ [title1, title2, ...], [url1, url2, ...], [extract1, extract2, ...]]
   const conjugatedResults = [
-    openSearchJson[0],
-    openSearchJson[1],
-    extractSentences,
+    [...openSearchJson[0]],
+    [...openSearchJson[1]],
+    [...extractSentences],
   ];
-  console.log(
-    'formSubmitHandler conjugated multi-d array: ' + conjugatedResults
-  );
+  // console.log(
+  //   'formSubmitHandler conjugated multi-d array: ' + conjugatedResults
+  // );
 
-  // todo: call displayResult function to write-out results to web-page
-  // array of [titles], [urls], [sentence extracts]
+  // conjugateResult is: array of [titles], [urls], [sentence extracts]
   displayResult(conjugatedResults);
 }
 
 async function getRandomArticle(event) {
   event.preventDefault();
-  // call getRandomArticle() to get a link
-  // launch the link (in a new browser window?)
+  // todo: call getRandomArticle() to get a link
+  // todo: launch the link (in a new browser window?)
 }
 
 async function displayResult(data) {
-  console.log('displayResult() param is: ', data);
-  // validate input is json, and not blank or an error
+  console.log('displayResult() receive data param: ', data);
+  // todo: validate input is json, and not undefined or null
+
+  // unpack the 2-d array to simplify usage
+  const titlesArr = [...data[0]];
+  const linksArr = [...data[1]];
+  const extractsArr = [...data[2]];
+
+  // acquire ref to Section element where result table will be built
   const resultSection = document.getElementById('resultSection');
 
   // remove any existing table
@@ -88,26 +86,34 @@ async function displayResult(data) {
   // generate entries
   const tBody = document.createElement('tbody');
 
-  data[0].forEach((dataSet) => {
+  // gather Title
+  for (let idx = 0; idx < titlesArr.length; idx++) {
+    const currentTitle = titlesArr[idx];
+    const currentUrl = linksArr[idx];
+    const currentExtract = removeHtmlElements(extractsArr[idx]);
+    console.log('currentTitle: ' + currentTitle);
+    console.log('currentUrl: ' + currentUrl);
+    console.log('currentExtract: ' + currentExtract);
+
     // new row
     const contentRow = document.createElement('tr');
     const titleCell = document.createElement('td');
     const excerptCell = document.createElement('td');
     // linked title
     const titleEl = document.createElement('a');
-    titleEl.setAttribute('href', dataSet[1]);
+    titleEl.setAttribute('href', currentUrl);
     titleEl.setAttribute('target', '_blank');
-    titleEl.textContent = dataSet[0];
+    titleEl.textContent = currentTitle;
     titleCell.appendChild(titleEl);
     // document excerpt
     const docExcerpt = document.createElement('p');
-    docExcerpt.textContent = dataSet[2];
+    docExcerpt.textContent = currentExtract;
     // add to the new row then to the body
     excerptCell.appendChild(docExcerpt);
     contentRow.appendChild(titleCell);
     contentRow.appendChild(excerptCell);
     tBody.appendChild(contentRow);
-  });
+  }
 
   // attach header to table
   displayTbl.appendChild(tHead);

@@ -1,10 +1,13 @@
 // function takes possible html string and removes elements, retaining the text content
-function removeElements(innerHtml) {
-  const htmlElementsRegEx = /\<.+?\>|\<\\.+?\>/gi;
-  const noElements = innerHtml.replace(htmlElementsRegEx, '');
+function removeHtmlElements(data) {
+  const innerHtml = String(data);
+  const htmlElementsRegex = /\<.+?\>|\<\\.+?\>/gi;
+  const noElements = innerHtml.replace(htmlElementsRegex, '');
   const quoteRegex = /&quot;/gi;
   const quoteChars = noElements.replace(quoteRegex, '"');
-  const regExSpaces = /\s{2}/gi;
-  const normalizedSpaces = quoteChars.replace(regExSpaces, ' ');
-  return normalizedSpaces;
+  const regexSpaces = /\s{2}/gi;
+  const normalizedSpaces = quoteChars.replace(regexSpaces, ' ');
+  const regexNewlineChars = /\\n/gi;
+  const strippedNewLineChars = normalizedSpaces.replace(regexNewlineChars, '');
+  return strippedNewLineChars;
 }

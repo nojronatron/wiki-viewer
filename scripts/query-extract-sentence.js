@@ -42,17 +42,19 @@ async function getQueryExtractSentence(title) {
       if (!response.ok) {
         throw new Error(`Fetch HTTP Error: ${response.Error}`);
       }
-      return response.text();
+      return response;
     })
     .catch((err) => {
       console.error(`Fetch problem: ${err.message}`);
     });
 
-  // return property 'extract' to the caller
-  console.log('query extract sentence fetchResult text: ' + fetchResult);
-  const regEx = /\"\<p.+p\>\"/i;
-  const result = fetchResult.match(regEx);
+  let textResult = await fetchResult.text();
 
-  console.log('query extract sentence regEx matcher returned ' + result);
+  // return property 'extract' to the caller
+  // console.log('query extract sentence fetchResult text: ' + textResult);
+  const regEx = /\"\<p.+p\>\"/i;
+  const result = await textResult.match(regEx);
+
+  console.log('query extract sentence regEx matcher will return ' + result);
   return result;
 }
