@@ -66,7 +66,7 @@ async function displayResult(data) {
   const headRow = document.createElement('tr');
 
   const titleHeader = document.createElement('th');
-  titleHeader.textContent = 'Title';
+  titleHeader.textContent = 'Title (opens in new tab)';
   titleHeader.setAttribute('scope', 'col');
 
   const extractHeader = document.createElement('th');

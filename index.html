@@ -14,21 +14,23 @@
 
 <body>
   <section class="inputSection">
-    <div>
-      <form id="docSearchForm">
-        <label for="queryInput">Enter a topic:</label>
-        <input type="text" id="queryInput" name="queryInput" />
-        <input type="submit" value="Get Article Snippets" />
-      </form>
-    </div>
-    <div>
-      <input type="button" value="Get Random Article" id="clickRandomArticle" />
-    </div>
+    <form id="docSearchForm">
+      <label for="queryInput">Enter a topic to search</label>
+      <input type="text" id="queryInput" name="queryInput" />
+      <input type="submit" value="List Articles About Your Topic" />
+    </form>
+    <input type="button" value="Open Random Article" id="clickRandomArticle" />
   </section>
 
   <section id="resultSection">
 
   </section>
+
+  <footer class="bordered">
+    <p>Designed and Developed by <a href="https://github.com/nojronatron">Nojronatron</a></p>
+    <p>For FreeCodeCamp <em>Take Home Project</em> &quot;Wiki Viewer&quot;</p>
+  </footer>
+
   <script src="scripts/query-extract-sentence.js" defer></script>
   <script src="scripts/opensearch-title.js" defer></script>
   <script src="scripts/process-innerHtml.js" defer></script>
