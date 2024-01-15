@@ -26,7 +26,6 @@ async function formSubmitHandler(event) {
   });
 
   const extractSentences = await Promise.all(extractSentencesPromises);
-  // console.log('formSubmitHandler extractSentences array: ' + extractSentences);
 
   // paste-together arrays like: [ [title1, title2, ...], [url1, url2, ...], [extract1, extract2, ...]]
   const conjugatedResults = [
@@ -34,22 +33,19 @@ async function formSubmitHandler(event) {
     [...openSearchJson[1]],
     [...extractSentences],
   ];
-  // console.log(
-  //   'formSubmitHandler conjugated multi-d array: ' + conjugatedResults
-  // );
 
   // conjugateResult is: array of [titles], [urls], [sentence extracts]
   displayResult(conjugatedResults);
 }
 
 async function clickRandomArticleHandler(event) {
-  // event.preventDefault();
   getRandomReferences();
 }
 
 async function displayResult(data) {
-  console.log('displayResult() receive data param: ', data);
-  // todo: validate input is json, and not undefined or null
+  if (data === null || Array.isArray(data) !== true) {
+    return;
+  }
 
   // unpack the 2-d array to simplify usage
   const titlesArr = [...data[0]];
@@ -64,8 +60,7 @@ async function displayResult(data) {
     resultSection.removeChild(resultSection.lastChild);
   }
 
-  // table, thead, tr, ht => title (href url), extract
-  // table, body, tr, td
+  // table, thead, tr, ht => title (href url), extract table, body, tr, td
   const displayTbl = document.createElement('table');
   const tHead = document.createElement('thead');
   const headRow = document.createElement('tr');
@@ -82,31 +77,31 @@ async function displayResult(data) {
   headRow.appendChild(extractHeader);
   tHead.appendChild(headRow);
 
-  // generate entries
+  // generate table body, cells
   const tBody = document.createElement('tbody');
 
-  // gather Title
+  // gather Titles
   for (let idx = 0; idx < titlesArr.length; idx++) {
     const currentTitle = titlesArr[idx];
     const currentUrl = linksArr[idx];
     const currentExtract = removeHtmlElements(extractsArr[idx]);
-    console.log('currentTitle: ' + currentTitle);
-    console.log('currentUrl: ' + currentUrl);
-    console.log('currentExtract: ' + currentExtract);
 
     // new row
     const contentRow = document.createElement('tr');
     const titleCell = document.createElement('td');
     const excerptCell = document.createElement('td');
+
     // linked title
     const titleEl = document.createElement('a');
     titleEl.setAttribute('href', currentUrl);
     titleEl.setAttribute('target', '_blank');
     titleEl.textContent = currentTitle;
     titleCell.appendChild(titleEl);
+
     // document excerpt
     const docExcerpt = document.createElement('p');
     docExcerpt.textContent = currentExtract;
+
     // add to the new row then to the body
     excerptCell.appendChild(docExcerpt);
     contentRow.appendChild(titleCell);
