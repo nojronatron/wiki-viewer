@@ -1,6 +1,6 @@
 'use strict';
 
-// function take a Wikimedia 'title' and returns only the 'extract' raw text
+// function takes a Wikimedia 'title' and returns only the Extract Text
 async function getQueryExtractSentence(title) {
   let fetchUrl =
     'http://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles=' +
