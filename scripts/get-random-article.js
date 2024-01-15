@@ -1,17 +1,9 @@
 'use strict';
 
 async function getRandomReferences() {
-  console.log('entered getRandomReferences()');
-
   const randRefs = await getRandomRefs();
-  console.log('randRefs: ', randRefs);
-  const articleId = randRefs[0];
   const articleTitle = randRefs[1];
-  console.log('articleId: ' + articleId);
-  console.log('articleTile: ' + articleTitle);
-
-  const articleFullUrl = await getArticleUrl(articleId, articleTitle);
-  console.log('received linkUrlArr from getArticleUrl: ' + articleFullUrl);
+  const articleFullUrl = await getArticleUrl(articleTitle);
 
   // create a hidden link element for navigation to random article
   const hiddenLink = document.createElement('a');
@@ -23,9 +15,10 @@ async function getRandomReferences() {
   return true;
 }
 
+// get a title and id of a randomly selected Wiki article
 async function getRandomRefs() {
   console.log('entered getRandomRefs function.');
-  // example random article query: https://en.wikipedia.org/w/api.php?action=query&list=random&rnlimit=1
+
   const url =
     'https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&list=random&rnlimit=1';
 
@@ -51,22 +44,17 @@ async function getRandomRefs() {
       console.error(`Fetch problem in getRandomRefs(): ${err.message}`);
     });
 
-  // console.log('fetchResult is now: ' + fetchResult);
   const queryRandomZeroId = fetchResult[0].id;
   const queryRandomZeroTitle = fetchResult[0].title;
-  // console.log('queryRandom0Id: ' + queryRandomZeroId);
-  // console.log('queryRandomZeroTitle: ' + queryRandomZeroTitle);
   return [queryRandomZeroId, queryRandomZeroTitle];
 }
 
-async function getArticleUrl(pageId, title) {
+// accept an article title and return the full URL to the Wiki entry
+async function getArticleUrl(title) {
   if (title === undefined || title.length < 1) {
     return '';
   }
 
-  console.log('getArticleUri title, id: ' + title, pageId);
-
-  // api.php?action=query&prop=info&inprop=protection&titles=MediaWiki
   const queryArticleUrl =
     'https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&titles=' +
     title +
@@ -115,37 +103,3 @@ async function getArticleUrl(pageId, title) {
 
   return fetchArticleUriResult;
 }
-
-// fetch(url)
-//     .then(function(response){return response.json();})
-//     .then(function(response) {
-//         var pages = response.query.pages;
-//         for (var p in pages) {
-//             console.log(pages[p].title + " has " + pages[p].length + " bytes.");
-//         }
-//     })
-//     .catch(function(error){console.log(error);});
-
-// example json
-// {
-//   'batchcomplete': '',
-//   'query': {
-//     'pages': {
-//       '5618516': {
-//         'pageid': 5618516,
-//         'ns': 1,
-//         'title': 'Talk:David Dreman',
-//         'contentmodel': 'wikitext',
-//         'pagelanguage': 'en',
-//         'pagelanguagehtmlcode': 'en',
-//         'pagelanguagedir': 'ltr',
-//         'touched': '2024-01-11T15:35:27Z',
-//         'lastrevid': 659165146,
-//         'length': 1999,
-//         'fullurl': 'https://en.wikipedia.org/wiki/Talk:David_Dreman',
-//         'editurl': 'https://en.wikipedia.org/w/index.php?title=Talk:David_Dreman&action=edit',
-//         'canonicalurl': 'https://en.wikipedia.org/wiki/Talk:David_Dreman'
-//       }
-//     }
-//   }
-// }
