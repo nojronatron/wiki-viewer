@@ -7,7 +7,7 @@ let randButton = document.querySelector('#clickRandomArticle');
 
 // register an event handlers
 form.addEventListener('submit', formSubmitHandler, false);
-randButton.addEventListener('click', getRandomArticle, false);
+randButton.addEventListener('click', clickRandomArticleHandler, false);
 
 async function formSubmitHandler(event) {
   event.preventDefault();
@@ -42,10 +42,9 @@ async function formSubmitHandler(event) {
   displayResult(conjugatedResults);
 }
 
-async function getRandomArticle(event) {
-  event.preventDefault();
-  // todo: call getRandomArticle() to get a link
-  // todo: launch the link (in a new browser window?)
+async function clickRandomArticleHandler(event) {
+  // event.preventDefault();
+  getRandomReferences();
 }
 
 async function displayResult(data) {

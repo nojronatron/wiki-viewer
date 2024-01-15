@@ -6,6 +6,10 @@ let form = document.querySelector('#docSearchForm');
 // register an event handler to manage form data submission
 form.addEventListener('submit', submitHandler, false);
 
+// register an event handler for random article button click
+const clickRandomArticleBtn = document.getElementById('clickRandomArticle');
+clickRandomArticleBtn.addEventListener('click', getRandomArticle, false);
+
 async function submitHandler(event) {
   event.preventDefault();
   const userInput = event.target.queryInput.value;
