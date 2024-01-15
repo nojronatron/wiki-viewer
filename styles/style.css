@@ -77,4 +77,5 @@ footer {
   background-color: orange;
   padding: 4px;
   display: flex;
+  justify-content: center;
 }
