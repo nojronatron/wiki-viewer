@@ -2,19 +2,19 @@
 
 // function takes a Wikimedia 'title' and returns only the Extract Text
 async function getQueryExtractSentence(title) {
-  let fetchUrl =
-    'http://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles=' +
+  let queryExtractUrl =
+    'http://en.wikipedia.org/w/api.php?origin=*&action=query&prop=extracts&exintro=true&explaintext=true&titles=' +
     title +
-    '&exsentences=1&exlimit=10&format=json&origin=*';
+    '&format=json';
 
-  let headersList = {
+  let queryExtractHeaders = {
     Accept: '*/*',
     'User-Agent': 'Exploring/1.0 (https://github.com/nojronatron)',
   };
 
-  const fetchResult = await fetch(fetchUrl, {
+  const queryExtractFetchResult = await fetch(queryExtractUrl, {
     method: 'GET',
-    headers: headersList,
+    headers: queryExtractHeaders,
   })
     .then((response) => {
       if (!response.ok) {
@@ -22,14 +22,16 @@ async function getQueryExtractSentence(title) {
       }
       return response;
     })
+    .then((data) => data.json())
     .catch((err) => {
-      console.error(`Fetch problem: ${err.message}`);
+      console.error(
+        `Fetch problem in getQueryExtractSentence(): ${err.message}`
+      );
     });
 
-  let textResult = await fetchResult.text();
-
-  // return 'extract' property content to the caller
-  const regEx = /\"\<p.+p\>\"/i;
-  const result = await textResult.match(regEx);
-  return result;
+  const jsonResult = JSON.stringify(queryExtractFetchResult, null, 2);
+  const regex = /(?:"extract":)(?<sentence>\s".*")/i; // note: case-insensitivity
+  const matches = jsonResult.match(regex).toString();
+  const extractText = matches.replace(/"extract": "/, '');
+  return extractText;
 }
