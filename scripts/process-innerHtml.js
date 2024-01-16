@@ -1,3 +1,5 @@
+'use strict';
+
 // function takes possible html string and removes html elements and other non-text characters
 function removeHtmlElements(data) {
   const innerHtml = String(data);
